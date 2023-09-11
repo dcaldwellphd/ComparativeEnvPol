@@ -11,12 +11,16 @@ efx_to_obs(
 )
 }
 \arguments{
-\item{obs_data}{A data frame containing the observed data used to fit the model.}
+\item{obs_data}{A data frame containing the observed data used to fit 
+the model.}
 
-\item{filter_obs_to}{An optional string to filter the observed data to a selection of attitude items.}
+\item{filter_obs_to}{An optional string to filter the observed data to a 
+selection of attitude items.}
 
-\item{baseline}{A data frame containing the summary of the posterior distribution of country effects from the model.}
+\item{baseline}{A data frame containing the summary of the posterior 
+distribution of country effects from the model.}
 }
 \description{
-Automates the data wrangling required to compare country effects from a model with the observed data used to fit it.
+Automates the data wrangling required to compare country effects from a 
+model with the observed data used to fit it.
 }

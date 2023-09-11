@@ -17,12 +17,15 @@ summarise_trends(
 
 \item{x}{A string containing the name of the variable counting time.}
 
-\item{x_vals}{A vector containing values of x at which to calculate the median and credible interval.}
+\item{x_vals}{A vector containing values of x at which to calculate the 
+median and credible interval.}
 
 \item{control_var}{A string containing the name of a control variable column.}
 
-\item{control_val}{A numeric value for fitting group-level trends (e.g., the overall mean in the data).}
+\item{control_val}{A numeric value for fitting group-level trends 
+(e.g., the overall mean in the data).}
 }
 \description{
-Takes a multilevel \code{stanreg} object as input and returns the median and credible interval of time trends for each group.
+Takes a multilevel \code{stanreg} object as input and returns the median 
+and credible interval of time trends for each group.
 }

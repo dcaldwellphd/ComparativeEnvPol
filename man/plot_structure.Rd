@@ -18,26 +18,28 @@ plot_structure(
 )
 }
 \arguments{
-\item{data}{A data set containing the information to be plotted}
+\item{data}{A data set containing the information to be plotted.}
 
-\item{x}{Name of the column for the x-axis}
+\item{x}{Name of the column for the x-axis.}
 
-\item{y}{Name of the column for the y-axis}
+\item{y}{Name of the column for the y-axis.}
 
-\item{color}{Name of the column for an optional color aesthetic}
+\item{color}{Name of the column for an optional color aesthetic.}
 
-\item{fill}{Name of the column for an optional fill aesthetic}
+\item{fill}{Name of the column for an optional fill aesthetic.}
 
-\item{linetype}{Name of the column for an optional linetype aesthetic}
+\item{linetype}{Name of the column for an optional linetype aesthetic.}
 
-\item{shape}{Name of the column for an optional shape aesthetic}
+\item{shape}{Name of the column for an optional shape aesthetic.}
 
-\item{group}{Name of the column for an optional group aesthetic}
+\item{group}{Name of the column for an optional group aesthetic.}
 
-\item{facet_vars}{A set of variables or expressions quoted by `ggplot2::vars` and defining faceting groups}
+\item{facet_vars}{A set of variables or expressions quoted by 
+\code{ggplot2::vars} and defining faceting groups.}
 
-\item{ncol}{An option to set the number of panels in a row when using facet_wrap}
+\item{ncol}{An option to set the number of panels in a row when using 
+\code{facet_wrap}.}
 }
 \description{
-Creates a ggplot2 object with any specified faceting and aesthetics.
+Creates a \code{ggplot2} object with any specified faceting and aesthetics.
 }

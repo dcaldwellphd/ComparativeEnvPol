@@ -9,7 +9,8 @@ process_ideology(data, issp_name, csv = issp_env_vars)
 \arguments{
 \item{data}{A wave of ISSP data.}
 
-\item{issp_name}{Name of the column in the csv file containing ISSP attitude item names for the wave.}
+\item{issp_name}{Name of the column in the CSV file containing ISSP 
+attitude item names for the wave.}
 
 \item{csv}{The csv file used to recode the wave of ISSP data.}
 }

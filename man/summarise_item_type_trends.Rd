@@ -18,17 +18,22 @@ summarise_item_type_trends(
 
 \item{x}{A string containing the name of the variable counting time.}
 
-\item{x_vals}{A vector containing values of x at which to calculate the median and credible interval.}
+\item{x_vals}{A vector containing values of x at which to calculate the 
+median and credible interval.}
 
 \item{z1}{A string containing the name of the first dummy variable.}
 
 \item{z2}{A string containing the name of the second dummy variable.}
 
-\item{cntry_var}{A string containing the name of the variable used to model country effects.}
+\item{cntry_var}{A string containing the name of the variable used to 
+model country effects.}
 }
 \description{
-This is a special case of \code{\link{summarise_trends}} for summarising trends separated by item type (see details).
+This is a special case of \code{\link{summarise_trends}} for summarising 
+trends separated by item type (see details).
 }
 \details{
-This function is specifically meant for a three-way grouping of attitude items based on topic-expression (environment-conative, environment-cognitive/affective, climate-cognitive/affective).
+This function is specifically meant for a three-way grouping of attitude 
+items based on topic-expression (environment-conative, 
+environment-cognitive/affective, climate-cognitive/affective).
 }

@@ -26,19 +26,37 @@ prepare_wave(
 
 \item{rm_cntry}{Countries to remove from the wave (see details).}
 
-\item{custom_ccode_to_cntry}{A set of custom values mapping country names to country codes (see details).}
+\item{custom_ccode_to_cntry}{A set of custom values mapping country names
+to country codes (see details).}
 
-\item{custom_cntry_to_ccode}{A set of custom values mapping country codes to country names (see details).}
+\item{custom_cntry_to_ccode}{A set of custom values mapping country codes
+to country names (see details).}
 }
 \description{
-Performs a number of miscellaneous operations on a wave of ISSP data, establishing consistent country codes and names, creating an id and year column for keeping track of observations when joining waves together, and applying a consistent name and numeric class to the column containing post-stratification weights.
+Performs a number of miscellaneous operations on a wave of ISSP data,
+establishing consistent country codes and names, creating id and year
+columns for keeping track of observations when joining waves together, and
+applying a consistent name and numeric class to the column containing
+post-stratification weights.
 }
 \details{
-To remove countries from a wave of ISSP data, provide \code{rm_cntry} with a pattern to match based on country names used by the ISSP in that wave. For example, default searches for "Northern Ireland" and removes corresponding rows. Remove multiple countries using a pattern like "Nothern Ireland|China".
+To remove countries from a wave of ISSP data, provide \code{rm_cntry} with
+a pattern to match based on country names used by the ISSP in that wave.
+For example, default searches for "Northern Ireland" and removes
+corresponding rows. Remove multiple countries using a pattern like
+"Nothern Ireland|...".
 
-The function uses \code{countrycode} to assign consistent two character ISO codes based on country names used by the ISSP. However, some ISSP values require a custom mapping, such as the labels for East and West Germany before reunification.
+The function uses \code{countrycode} to assign consistent two-character ISO
+codes based on country names used by the ISSP. However, some ISSP values
+require a custom mapping, such as the labels for East and West Germany
+before reunification.
 
-Similarly, the function uses \code{countrycode} on the newly created ISO codes to return country names that may be more consistent than values used by the ISSP across waves. The \code{custom_cntry_to_ccode} makes it possible to specify a custom mapping for these country names. For example, the default hard codes "GB" to "Great Britain" (rather than "United Kingdom"), reflecting the fact that Northern Ireland is excluded by default.
+Similarly, the function uses \code{countrycode} on the newly created ISO
+codes to return country names that may be more consistent than values used
+by the ISSP across waves. The \code{custom_cntry_to_ccode} makes it
+possible to specify a custom mapping for these country names. For example,
+the default hard codes "GB" to "Great Britain" (rather than "United
+Kingdom"), reflecting the fact that Northern Ireland is excluded by default.
 }
 \seealso{
 \code{\link[countrycode]{countrycode}}

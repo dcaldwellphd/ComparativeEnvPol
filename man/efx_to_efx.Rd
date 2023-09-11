@@ -14,21 +14,33 @@ efx_to_efx(
 )
 }
 \arguments{
-\item{baseline}{A data frame containing the summary of the posterior distribution of country effects from the baseline model.}
+\item{baseline}{A data frame containing the summary of the posterior 
+distribution of country effects from the baseline model.}
 
-\item{baseline_obs}{A data frame containing the observed data used to fit the the baseline model.}
+\item{baseline_obs}{A data frame containing the observed data used to fit 
+the the baseline model.}
 
 \item{baseline_label}{A string to label rows summarizing the baseline model.}
 
-\item{comparisons}{A single data frame or list of data frames containing the summary of the posterior distribution of country effects from the comparison models.}
+\item{comparisons}{A single data frame or list of data frames containing 
+the summary of the posterior distribution of country effects from the 
+comparison models.}
 
-\item{comparison_obs}{A data frame containing the observed data used to fit comparison models.}
+\item{comparison_obs}{A data frame containing the observed data used to fit 
+comparison models.}
 
-\item{comparison_labels}{A string or vector of strings to label rows summarizing the comparison model(s).}
+\item{comparison_labels}{A string or vector of strings to label rows 
+summarizing the comparison model(s).}
 }
 \description{
-Automates the data wrangling required to compare country effects from different models (see details).
+Automates the data wrangling required to compare country effects from 
+different models (see details).
 }
 \details{
-Many plots in the paper compare climate concern polarization trends with something else, such as economic partisan polarization or the economic ideological constraint of climate-related attitudes. Joining summaries of the posterior distributions from different models involves a lot of repetitive data wrangling, which is automated by the \code{efx_to_efx} function.
+Many plots in the paper compare climate concern polarization trends with 
+something else, such as economic partisan polarization or the economic 
+ideological constraint of climate-related attitudes. Joining summaries of 
+the posterior distributions from different models involves a lot of 
+repetitive data wrangling, which is automated by the \code{efx_to_efx} 
+function.
 }

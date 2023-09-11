@@ -13,9 +13,11 @@ add_point_when_nonmissing(
 )
 }
 \arguments{
-\item{mod_summary}{A model summary created by \code{summarise_trends} or a related function.}
+\item{mod_summary}{A model summary created by \code{summarise_trends} or 
+a related function.}
 
-\item{observed_data}{The data used to fit the model summarised in mod_summary.}
+\item{observed_data}{The data used to fit the model summarised in 
+\code{mod_summary}.}
 
 \item{group_col}{The grouping variable to add points by.}
 
@@ -24,5 +26,6 @@ add_point_when_nonmissing(
 \item{time_counter}{The column counting time.}
 }
 \description{
-Adds a column containing values along the median regression line for each group when it is present in a survey wave and NA otherwise.
+Adds a column with values along the median regression line for each group 
+when it is present in a survey wave. Returns \code{NA} otherwise.
 }

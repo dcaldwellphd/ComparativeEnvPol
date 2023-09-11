@@ -18,17 +18,47 @@ process_party(
 
 \item{pty_cols}{The names of the party affiliation columns in the ISSP wave.}
 
-\item{use_attr}{Logical. Should country codes be matched to attributes of party affiliation columns (see details)?}
+\item{use_attr}{Logical. Should country codes be matched to attributes of 
+party affiliation columns (see details)?}
 
-\item{attr_sep}{A string with the delimiter separating country codes in attributes of the party affiliation column (see details).}
+\item{attr_sep}{A string with the delimiter separating country codes in 
+attributes of the party affiliation column (see details).}
 
-\item{other_thresh}{The threshold below which to classify small party supporters as "Other", as a weighted proportion of the country-sample.}
+\item{other_thresh}{The threshold below which to classify small party 
+supporters as "Other", as a weighted proportion of the country-sample.}
 
-\item{recode_usa}{Logical. Should US party strength variable be recoded into unordered categories}
+\item{recode_usa}{Logical. Should US party strength be recoded into 
+unordered categories (see details)?}
 }
 \description{
 Recodes party affiliation items in an ISSP wave.
 }
 \details{
-The ISSP data has a row for every respondent and a column for party affiliation in every country. This makes recoding party affiliation complicated. The same values are often used to indicate missingness within countries and rows of party affiliation columns corresponding to other countries. Part of this function matches country codes to each country's party affiliation column and recodes the values used to indicate within-country missingness. This is relatively easy during later waves of the ISSP, where ISO2 country codes are part of the names of party affiliation columns. However, country information is stored in the attributes of party affiliation columns during earlier waves such as 1993 and 2000. The \code{use_attr} argument allows the user to specify whether to use the attributes of party affiliation columns to identify the country. If \code{use_attr = TRUE}, the \code{attr_sep} argument specifies the delimiter separating country codes in the attributes of party affiliation columns. The \code{attr_sep} argument should be set to "2" for 1993 and "_" for 2000. If \code{use_attr = FALSE}, the function assumes that the party affiliation column names in the ISSP wave contain country codes.
+The ISSP data has a row for every respondent and a column for party 
+affiliation in every country. This makes recoding party affiliation 
+complicated. The same values are often used to indicate missingness within 
+countries and rows of party affiliation columns corresponding to other 
+countries. Part of this function matches country codes to each country's 
+party affiliation column and recodes the values used to indicate 
+within-country missingness. This is relatively easy during later waves of 
+the ISSP, where two-character ISO country codes are part of the names of 
+party affiliation columns. However, during earlier waves, country 
+information is stored in the attributes of party affiliation columns. The 
+\code{use_attr} argument allows the user to specify whether to use the 
+attributes of party affiliation columns to identify the country. If 
+\code{use_attr = TRUE}, the \code{attr_sep} argument specifies the 
+delimiter separating country codes in the attributes of party affiliation 
+columns. The \code{attr_sep} argument should be set to "2" for 1993 and 
+"_" for 2000. If \code{use_attr = FALSE}, the function assumes that the 
+party affiliation column names in the ISSP wave contain country codes.
+
+In many ISSP waves, the United States uses a standard ordinal party 
+strength variable to measure party affiliation. This is distinct from the 
+nominal party affiliation variables used in other countries. The 
+\code{recode_usa} argument allows the user to specify whether to recode the 
+US party strength variable into nominal party affiliation categories. If 
+\code{recode_usa = TRUE}, the function recodes partisans, strong partisans, 
+and party leaners as "Democrat" and "Republican", pure independents and 
+those not answering the question as "None", and all other respondents as 
+"Other".
 }

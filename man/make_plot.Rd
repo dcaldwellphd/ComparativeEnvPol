@@ -50,21 +50,29 @@ make_plot(
 
 \item{group}{Name of the column for an optional group aesthetic.}
 
-\item{facet_vars}{A set of variables or expressions quoted by `ggplot2::vars` and defining faceting groups.}
+\item{facet_vars}{A set of variables or expressions quoted by 
+\code{ggplot2::vars} and defining faceting groups.}
 
-\item{ncol}{An option to set the number of panels in a row when using facet_wrap.}
+\item{ncol}{An option to set the number of panels in a row when using 
+facet_wrap.}
 
-\item{points}{Name of the variable containing values of the points to draw for each group.}
+\item{points}{Name of the variable containing values of the points to draw 
+for each group.}
 
-\item{line}{Name of the variable containing values of the line to draw for each group.}
+\item{line}{Name of the variable containing values of the line to draw 
+for each group.}
 
-\item{ci_upper}{Name of the variable containing the upper bound of the credible interval of the median regression line for each group.}
+\item{ci_upper}{Name of the variable containing the upper bound of the 
+credible interval of the median regression line for each group.}
 
-\item{ci_lower}{Name of the variable containing the lower bound of the credible interval of the median regression line for each group.}
+\item{ci_lower}{Name of the variable containing the lower bound of the 
+credible interval of the median regression line for each group.}
 
 \item{hline}{A value along which to draw a horizontal line on the y-axis.}
 
-\item{missingness_var}{A variable containing median values along the regression line for each group, for when you want to make the line and credible interval less promiment outside the range of available data.}
+\item{missingness_var}{A variable containing median values along the 
+regression line for each group, for when you want to make the line and 
+credible interval less promiment outside the range of available data.}
 
 \item{breaks}{A character vector of breaks.}
 
@@ -80,12 +88,14 @@ make_plot(
 
 \item{labels}{A character vector of labels for the breaks.}
 
-\item{ndecade_to_years}{Logical. Do you want to display the number of decades as years on the x-axis?}
+\item{ndecade_to_years}{Logical. Do you want to display the number of 
+decades as years on the x-axis?}
 
 \item{ylab}{A string or expression to use as the y-axis label.}
 
 \item{ylim}{A vector of values to use as the y-axis limits.}
 }
 \description{
-A wrapper around \code{plot_structure}, \code{plot_layers}, and \code{plot_scales}, with default values set to common use cases in the paper.
+A wrapper around \code{plot_structure}, \code{plot_layers}, and 
+\code{plot_scales}, with default values set to common use cases in the paper.
 }

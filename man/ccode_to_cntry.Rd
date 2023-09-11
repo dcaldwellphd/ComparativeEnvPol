@@ -18,7 +18,8 @@ ccode_to_cntry(
 
 \item{output_col}{The name to give the resulting column of country names.}
 
-\item{custom_match}{A set of custom values mapping two-character ISO country codes to country names (see \code{\link[countrycode]{countrycode}}).}
+\item{custom_match}{A set of custom values mapping two-character ISO 
+country codes to country names (see \code{\link[countrycode]{countrycode}}).}
 }
 \description{
 Converts a column of two-character ISO country codes to country names

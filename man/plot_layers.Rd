@@ -15,20 +15,27 @@ plot_layers(
 )
 }
 \arguments{
-\item{p}{A ggplot2 object.}
+\item{p}{A \code{ggplot2} object.}
 
-\item{points}{Name of the variable containing values of the points to draw for each group.}
+\item{points}{Name of the variable containing values of the points to draw 
+for each group.}
 
-\item{line}{Name of the variable containing values of the line to draw for each group.}
+\item{line}{Name of the variable containing values of the line to draw 
+for each group.}
 
-\item{ci_upper}{Name of the variable containing the upper bound of the credible interval of the median regression line for each group.}
+\item{ci_upper}{Name of the variable containing the upper bound of the 
+credible interval of the median regression line for each group.}
 
-\item{ci_lower}{Name of the variable containing the lower bound of the credible interval of the median regression line for each group.}
+\item{ci_lower}{Name of the variable containing the lower bound of the 
+credible interval of the median regression line for each group.}
 
 \item{hline}{A value along which to draw a horizontal line on the y-axis.}
 
-\item{missingness_var}{A variable containing median values along the regression line for each group, for when you want to make the line and credible interval less promiment outside the range of available data.}
+\item{missingness_var}{A variable containing median values along the 
+regression line for each group, for when you want to make the line and 
+credible interval less promiment outside the range of available data.}
 }
 \description{
-Takes a ggplot2 object as input and adds specified geom layers that can highlight missingness in the data.
+Takes a \code{ggplot2} object as input and adds specified geom 
+layers that can highlight missingness in the data.
 }

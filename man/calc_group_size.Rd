@@ -21,20 +21,25 @@ calc_group_size(
 
 \item{group}{The variable on which to calculate counts and proportions.}
 
-\item{by}{Optional groups to nest observations by (e.g., attitude item, survey wave, country).}
+\item{by}{Optional groups to nest observations by (e.g., attitude item, 
+survey wave, country).}
 
-\item{ids}{Variables specifying cluster ids from largest level to smallest level (leaving the argument empty, NULL, 1, or 0 indicate no clusters).}
+\item{ids}{Variables specifying cluster ids from largest level to smallest 
+level (leaving the argument empty, NULL, 1, or 0 indicate no clusters).}
 
 \item{probs}{Variables specifying cluster sampling probabilities.}
 
 \item{strata}{Variables specifying strata.}
 
-\item{fpc}{Variables specifying a finite population correct (see \code{\link[survey]{svydesign}})}
+\item{fpc}{Variables specifying a finite population correct 
+(see \code{\link[survey]{svydesign}}).}
 
 \item{weights}{Variables specifying weights (inverse of probability).}
 
-\item{nest}{If \code{TRUE}, relabel cluster ids to enforce nesting within strata.}
+\item{nest}{If \code{TRUE}, relabel cluster ids to enforce nesting within 
+strata.}
 }
 \description{
-Calculates the survey weighted count and proportion of observations on a variable.
+Calculates the survey weighted count and proportion of observations on a 
+variable.
 }

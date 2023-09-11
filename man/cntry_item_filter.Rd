@@ -10,7 +10,7 @@ cntry_item_filter(
   cntry_col,
   wave_col = year,
   att_col_filter =
-    "att_item \%in\% c(\\n      'grhseff2', 'cutenvir', 'prenvir', \\n      'taxenvir', 'privent', 'incdiff'\\n      )"
+    "att_item \%in\% c('grhseff2', 'cutenvir', 'prenvir', \\n    'taxenvir', 'privent', 'incdiff')"
 )
 }
 \arguments{
@@ -22,8 +22,10 @@ cntry_item_filter(
 
 \item{wave_col}{A column with the year of survey waves.}
 
-\item{att_col_filter}{A string specifying a filter condition for the attitude items.}
+\item{att_col_filter}{A string specifying a filter condition for the 
+attitude items.}
 }
 \description{
-Subsets to specified attitude items that are asked more than once in a country.
+Subsets to specified attitude items that are asked more than once in a 
+country.
 }

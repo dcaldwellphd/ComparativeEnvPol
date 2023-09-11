@@ -14,5 +14,5 @@ count_ndecade(data, year_col, from = 1993)
 \item{from}{A numeric value to count time from.}
 }
 \description{
-Adds a variable counting the number of decades from a specified year
+Adds a variable counting the number of decades from a specified year.
 }

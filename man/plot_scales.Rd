@@ -19,7 +19,7 @@ plot_scales(
 )
 }
 \arguments{
-\item{p}{A ggplot2 object.}
+\item{p}{A \code{ggplot2} object.}
 
 \item{breaks}{A character vector of breaks.}
 
@@ -35,12 +35,14 @@ plot_scales(
 
 \item{labels}{A character vector of labels for the breaks.}
 
-\item{ndecade_to_years}{Logical. Do you want to display the number of decades as years on the x-axis?}
+\item{ndecade_to_years}{Logical. Do you want to display the number of 
+decades as years on the x-axis?}
 
 \item{ylab}{A string or expression to use as the y-axis label.}
 
 \item{ylim}{A vector of values to use as the y-axis limits.}
 }
 \description{
-Takes a ggplot2 object as input and sets scales and labels for axes and geom layers
+Takes a \code{ggplot2} object as input and sets scales and 
+labels for axes and geom layers.
 }
