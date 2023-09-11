@@ -1,7 +1,7 @@
 #' @title count_ndecade
 #' 
 #' @description
-#' Adds a variable counting the number of decades from a specified year
+#' Adds a variable counting the number of decades from a specified year.
 #' 
 #' @param data A data set object.
 #' @param year_col A column containing survey year.

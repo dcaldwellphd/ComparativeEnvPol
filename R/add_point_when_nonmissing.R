@@ -1,10 +1,13 @@
 #' @title add_point_when_nonmissing
 #' 
 #' @description
-#' Adds a column containing values along the median regression line for each group when it is present in a survey wave and NA otherwise.
-#'
-#' @param mod_summary A model summary created by \code{summarise_trends} or a related function.
-#' @param observed_data The data used to fit the model summarised in mod_summary.
+#' Adds a column with values along the median regression line for each group 
+#' when it is present in a survey wave. Returns \code{NA} otherwise.
+#' 
+#' @param mod_summary A model summary created by \code{summarise_trends} or 
+#' a related function.
+#' @param observed_data The data used to fit the model summarised in 
+#' \code{mod_summary}.
 #' @param group_col The grouping variable to add points by.
 #' @param year_col The column containing ISSP waves.
 #' @param time_counter The column counting time.
@@ -30,8 +33,8 @@ add_point_when_nonmissing <- function(
   in_wave <- observed_data |> 
     select({{group_col}}, {{year_col}}) |> 
     distinct() |>
-    # Collapse year column into a single string of waves in which a group is present
-    # e.g., "1993 2000 2010 2020", or "1993 2010", etc.
+    # Collapse year column into a string. This string represents the waves
+    # in which a group is present.
     summarise(
       years = str_c({{year_col}}, collapse = " "), 
       .by = {{group_col}}
@@ -45,7 +48,8 @@ add_point_when_nonmissing <- function(
     ) |> 
     select(-years)
   
-  # Use the dummy variables to add a column with the median value of groups when they are present in a wave
+  # Use the dummy variables to add a column with the median value of groups 
+  # when they are present in a wave
   output <- mod_summary |>
     left_join(in_wave, by = as_name(group_col_quo)) |> 
     mutate(
@@ -62,3 +66,4 @@ add_point_when_nonmissing <- function(
   return(output)
   
 }
+

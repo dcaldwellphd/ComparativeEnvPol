@@ -1,18 +1,22 @@
 #' @title summarise_item_type_trends
 #' 
 #' @description
-#' This is a special case of \code{\link{summarise_trends}} for summarising trends separated by item type (see details).
+#' This is a special case of \code{\link{summarise_trends}} for summarising 
+#' trends separated by item type (see details).
 #' 
 #' @param mod A stanreg object.
 #' @param x A string containing the name of the variable counting time.
-#' @param x_vals A vector containing values of x at which to calculate the median and credible interval.
+#' @param x_vals A vector containing values of x at which to calculate the 
+#' median and credible interval.
 #' @param z1 A string containing the name of the first dummy variable.
 #' @param z2 A string containing the name of the second dummy variable.
-#' @param cntry_var A string containing the name of the variable used to model country effects.
-#' 
+#' @param cntry_var A string containing the name of the variable used to 
+#' model country effects.
 #' 
 #' @details
-#' This function is specifically meant for a three-way grouping of attitude items based on topic-expression (environment-conative, environment-cognitive/affective, climate-cognitive/affective).
+#' This function is specifically meant for a three-way grouping of attitude 
+#' items based on topic-expression (environment-conative, 
+#' environment-cognitive/affective, climate-cognitive/affective).
 #' 
 #' @export
 #' 
@@ -93,7 +97,8 @@ summarise_item_type_trends <- function(
     # Subset to country effects
     filter(str_detect(group, cntry_var))
     
-    # Initialize a list to store the posterior predicted value of avg R2 for each country in each year for each type of the three types of item
+    # Initialize a list to store the posterior predicted value of avg R2 
+    # for each country in each year for each type of the three types of item
     fitted_pol_posterior_list <- vector(
         "list", 
         length = nrow(predvar_combos)
@@ -127,7 +132,8 @@ summarise_item_type_trends <- function(
     # Combine all data frames in the list into one data frame
     fitted_pol_posterior <- do.call("rbind", fitted_pol_posterior_list)
    
-    # Group by each country-year-itemtype combo and summarize posterior for this group with mean and quantiles
+    # Group by each country-year-itemtype combo and summarize posterior 
+    # for this group with mean and quantiles
     output <-  fitted_pol_posterior |>
     group_by(group, x, year, itemtype_fac) |>
     reframe(
@@ -171,7 +177,8 @@ summarise_item_type_trends <- function(
         slope_order,
         by = "group"
     ) |>
-    # Separate the country column into two columns containing the type of group (country, attitude item, etc.) and the group itself
+    # Separate the country column into two columns containing the type of 
+    # group (country, attitude item, etc.) and the group itself
     separate_wider_delim(
         cols = group,  
         delim = ":", 

@@ -1,11 +1,15 @@
 #' @title efx_to_obs
 #' 
 #' @description
-#' Automates the data wrangling required to compare country effects from a model with the observed data used to fit it.
+#' Automates the data wrangling required to compare country effects from a 
+#' model with the observed data used to fit it.
 #' 
-#' @param obs_data A data frame containing the observed data used to fit the model.
-#' @param baseline A data frame containing the summary of the posterior distribution of country effects from the model.
-#' @param filter_obs_to An optional string to filter the observed data to a selection of attitude items.
+#' @param obs_data A data frame containing the observed data used to fit 
+#' the model.
+#' @param baseline A data frame containing the summary of the posterior 
+#' distribution of country effects from the model.
+#' @param filter_obs_to An optional string to filter the observed data to a 
+#' selection of attitude items.
 #'
 #' @export
 #'
@@ -40,12 +44,14 @@ efx_to_obs <- function(
         "cntry", "year", "ndecade"
       )
     ) |>
-    # Add column with the median fitted trend for each country when it is present in a survey wave
+    # Add column with the median fitted trend for each country when it is 
+    # present in a survey wave
     add_point_when_nonmissing(
       observed_data = obs_data,
       group_col = cntry
     ) |>
-    # Paste asterisk to country names when their 90% credible interval is above zero
+    # Paste asterisk to country names when their 90% credible interval is 
+    # above zero
     mutate(
       cntry = if_else(
         slpe_pos95, paste0(cntry, "*"), cntry

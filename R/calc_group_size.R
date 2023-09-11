@@ -1,17 +1,22 @@
 #' @title calc_group_size
 #' 
 #' @description
-#' Calculates the survey weighted count and proportion of observations on a variable.
+#' Calculates the survey weighted count and proportion of observations on a 
+#' variable.
 #' 
 #' @param data A data set object.
 #' @param group The variable on which to calculate counts and proportions.
-#' @param by Optional groups to nest observations by (e.g., attitude item, survey wave, country).
-#' @param ids Variables specifying cluster ids from largest level to smallest level (leaving the argument empty, NULL, 1, or 0 indicate no clusters).
+#' @param by Optional groups to nest observations by (e.g., attitude item, 
+#' survey wave, country).
+#' @param ids Variables specifying cluster ids from largest level to smallest 
+#' level (leaving the argument empty, NULL, 1, or 0 indicate no clusters).
 #' @param probs Variables specifying cluster sampling probabilities.
 #' @param strata Variables specifying strata.
-#' @param fpc Variables specifying a finite population correct (see \code{\link[survey]{svydesign}})
+#' @param fpc Variables specifying a finite population correct 
+#' (see \code{\link[survey]{svydesign}}).
 #' @param weights Variables specifying weights (inverse of probability).
-#' @param nest If \code{TRUE}, relabel cluster ids to enforce nesting within strata.
+#' @param nest If \code{TRUE}, relabel cluster ids to enforce nesting within 
+#' strata.
 #' 
 #' @export
 #' 

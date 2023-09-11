@@ -1,13 +1,16 @@
 #' @title summarise_trends
 #' 
 #' @description
-#' Takes a multilevel \code{stanreg} object as input and returns the median and credible interval of time trends for each group.
+#' Takes a multilevel \code{stanreg} object as input and returns the median 
+#' and credible interval of time trends for each group.
 #' 
 #' @param mod A stanreg object.
 #' @param x A string containing the name of the variable counting time.
-#' @param x_vals A vector containing values of x at which to calculate the median and credible interval.
+#' @param x_vals A vector containing values of x at which to calculate the 
+#' median and credible interval.
 #' @param control_var A string containing the name of a control variable column.
-#' @param control_val A numeric value for fitting group-level trends (e.g., the overall mean in the data).
+#' @param control_val A numeric value for fitting group-level trends 
+#' (e.g., the overall mean in the data).
 #' 
 #' @export
 #' 
@@ -31,11 +34,13 @@ summarise_trends <- function(
     if (is.null(control_var)) {
 
         posterior <- mod |>
-            # Create df with draws of the global intercept and slope and random effects for each group
+            # Create df with draws of the global intercept and slope and 
+            # random effects for each group
             tidybayes::spread_draws(
                 `(Intercept)`,
                 !!sym(x),
-                # Names of the columns containing parameter-value keys for the random effects
+                # Names of the columns containing parameter-value keys for 
+                # the random effects
                 b[term, group]
                 ) |>
             # Remove grouped structure from the output of tidybayes
@@ -49,15 +54,17 @@ summarise_trends <- function(
                     term == x, "r_b", term
                     )
                 ) |> 
-            # Create separate columns for random intercepts and slopes of each group
-            # b is the column containing the random effects
+            # Create separate columns for random intercepts and slopes of 
+            # each group. b is the column containing the random effects
             pivot_wider(names_from = term, values_from = b) |>
-            # Rename the columns containing draws of the global intercept and slope
+            # Rename the columns containing draws of the global intercept 
+            # and slope
             rename(
                 glbl_a = `(Intercept)`,
                 glbl_b = !!sym(x)
                 ) |>
-            # Create columns containing the sum of the global and random intercepts and slopes
+            # Create columns containing the sum of the global and random 
+            # intercepts and slopes
             mutate(
                 c_a = glbl_a + r_a,
                 c_b = glbl_b + r_b
@@ -71,21 +78,27 @@ summarise_trends <- function(
 
         # Create df with columns containing the draws for each group
         group_sims <- posterior  |>
-            pivot_wider(names_from = group,
-                        values_from = c(c_a, c_b)) |>
+            pivot_wider(
+                names_from = group,
+                values_from = c(c_a, c_b)
+                ) |>
             # We no longer need keys identifying unique draws
             select(-.chain, -.iteration, -.draw)
 
-        # Create two data frames, one containing the draws of the intercepts for each group and one containing the draws of the slopes for each group
+        # Create two data frames, one containing the draws of the intercepts 
+        # for each group and one containing the draws of the slopes for 
+        # each group
         ints <- select(group_sims, contains("_a_"))
         slps <- select(group_sims, contains("_b_"))
 
-        # Loop over the values of x at which to calculate the median and credible interval
+        # Loop over the values of x at which to calculate the median and 
+        # credible interval
         output <- NULL
         for (x in x_vals){
             # The regression line for each group
             r_line <- ints + slps * x
-            # Create df with the median and credible interval of the regression line for each group
+            # Create df with the median and credible interval of the 
+            # regression line for each group
             post_sum <- data.frame(
                 t(
                     apply(
@@ -151,7 +164,9 @@ summarise_trends <- function(
 
         output <- NULL
         for (x_val in x_vals){
-            # The regression line for each group now includes the control variable, with values fit to the whatever is supplied as control_val (e.g., the overall mean in the data)
+            # The regression line for each group now includes the control 
+            # variable, with values fit to the whatever is supplied as 
+            # control_val (e.g., the overall mean in the data)
             r_line <- ints + slps * x_val + cntrls * control_val
             post_sum <- data.frame(t(apply(r_line, 2, function (y) quantile(y, probs))))
             post_sum$group <- colnames(r_line)
@@ -162,7 +177,9 @@ summarise_trends <- function(
     }
     # Clean the names of columns and keys in the output
     output <- output |>
-        # The group column currently has the name of columns from the df of intercepts, which is the first component in the construction of the regression lines for each group
+        # The group column currently has the name of columns from the df 
+        # of intercepts, which is the first component in the construction 
+        # of the regression lines for each group.
         # Strip prefixes from group names
         mutate(
             group = str_replace(
@@ -171,7 +188,8 @@ summarise_trends <- function(
                 replacement = ""
             )
         ) |>
-        # Give columns containing medians and credible intervals more informative names
+        # Give columns containing medians and credible intervals more 
+        # informative names
         rename(
             lower99 = X0.5.,
             lower95 = X2.5.,
@@ -200,7 +218,8 @@ summarise_trends <- function(
         mutate(order = seq(1, length(slope), 1)) |>
         select(group, order)
 
-    # Create object containing dummy variables for whether the credible interval of the slope for each group encompasses 0
+    # Create object containing dummy variables for whether the credible 
+    # interval of the slope for each group encompasses 0
     ci_dummies <- posterior |>
         # Unique draws of the slope for each group
         distinct(
@@ -213,7 +232,8 @@ summarise_trends <- function(
             slpe_pos95 = quantile(c_b, 0.025),
             .by = group
         ) |>
-        # Create dummy variable for whether the lower bound of the credible interval is positive
+        # Create dummy variable for whether the lower bound of the credible 
+        # interval is positive
         mutate(
             slpe_pos90 = slpe_pos90 > 0,
             slpe_pos95 = slpe_pos95 > 0
@@ -223,9 +243,11 @@ summarise_trends <- function(
     output <- output |>
         # Add column containing the order of group slopes to output
         left_join(slope_order, by = "group") |>
-        # Add columns containing dummy variables for whether the credible interval of the slope for each group encompasses 0
+        # Add columns containing dummy variables for whether the credible 
+        # interval of the slope for each group encompasses 0
         left_join(ci_dummies, by = "group") |>
-        # Separate group column into two columns containing the type of group (country, attitude item, etc.) and the group itself
+        # Separate group column into two columns containing the type of 
+        # group (country, attitude item, etc.) and the group itself
         separate_wider_delim(
             cols = group,
             delim = ":",

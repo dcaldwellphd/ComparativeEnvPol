@@ -6,7 +6,8 @@
 #' @param data A data set object.
 #' @param input_col A column containing two-character ISO country codes.
 #' @param output_col The name to give the resulting column of country names.
-#' @param custom_match A set of custom values mapping two-character ISO country codes to country names (see \code{\link[countrycode]{countrycode}}).
+#' @param custom_match A set of custom values mapping two-character ISO 
+#' country codes to country names (see \code{\link[countrycode]{countrycode}}).
 #' 
 #' @export
 #' 

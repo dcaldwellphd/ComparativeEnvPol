@@ -1,13 +1,15 @@
 #' @title cntry_item_filter
 #' 
 #' @description
-#' Subsets to specified attitude items that are asked more than once in a country.
+#' Subsets to specified attitude items that are asked more than once in a 
+#' country.
 #' 
 #' @param data A data set object.
 #' @param att_col A column with the names of attitude items.
 #' @param cntry_col A column with the names of countries.
 #' @param wave_col A column with the year of survey waves.
-#' @param att_col_filter A string specifying a filter condition for the attitude items.
+#' @param att_col_filter A string specifying a filter condition for the 
+#' attitude items.
 #'
 #' @export
 #'
@@ -19,10 +21,8 @@ cntry_item_filter <- function(
     att_col,
     cntry_col,
     wave_col = year,
-    att_col_filter = "att_item %in% c(
-      'grhseff2', 'cutenvir', 'prenvir', 
-      'taxenvir', 'privent', 'incdiff'
-      )"
+    att_col_filter = "att_item %in% c('grhseff2', 'cutenvir', 'prenvir', 
+    'taxenvir', 'privent', 'incdiff')"
     ){
 
   # Defuse columns passed to function arguments
@@ -34,7 +34,8 @@ cntry_item_filter <- function(
   # Parse the att_col_filter expression
   item_filter <- rlang::parse_expr(att_col_filter)
 
-  # Create an object with information on whether attitude items are asked more than once in a country
+  # Create an object with information on whether attitude items are asked 
+  # more than once in a country
   n_cases_filter <- data |>
     select({{att_col}}, {{cntry_col}}, {{wave_col}}) |>
     distinct() |>

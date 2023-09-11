@@ -1,8 +1,9 @@
 #' @title plot_scales
 #'
-#' @description Takes a ggplot2 object as input and sets scales and labels for axes and geom layers
+#' @description Takes a \code{ggplot2} object as input and sets scales and 
+#' labels for axes and geom layers.
 #'
-#' @param p A ggplot2 object.
+#' @param p A \code{ggplot2} object.
 #' @param breaks A character vector of breaks.
 #' @param linetype_values A set of aesthetic values mapping linetypes to breaks.
 #' @param fill_values A set of aesthetic values mapping fills to breaks.
@@ -10,7 +11,8 @@
 #' @param color_values A set of aesthetic values mapping colors to breaks.
 #' @param shape_values A set of aesthetic values mapping shapes to breaks.
 #' @param labels A character vector of labels for the breaks.
-#' @param ndecade_to_years Logical. Do you want to display the number of decades as years on the x-axis?
+#' @param ndecade_to_years Logical. Do you want to display the number of 
+#' decades as years on the x-axis?
 #' @param ylab A string or expression to use as the y-axis label.
 #' @param ylim A vector of values to use as the y-axis limits.
 #'
@@ -48,7 +50,8 @@ plot_scales <- function(
     ylab_expr <- ylab
   }
   # Set x-axis labels
-  # If ndecade_to_years is TRUE, display values of ndecade as ISSP Environment Module years
+  # If ndecade_to_years is TRUE, display values of ndecade as ISSP 
+  # Environment Module years
   if (ndecade_to_years){
     p <- p +
       scale_x_continuous(
@@ -60,7 +63,8 @@ plot_scales <- function(
         axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 90, hjust = 1)
       )
-    # If ndecade_to_years is FALSE, use scales::pretty_breaks() to plot values appearing in the data
+    # If ndecade_to_years is FALSE, use scales::pretty_breaks() to plot 
+    # values appearing in the data
   } else {
     p <- p +
       scale_x_continuous(breaks = pretty_breaks()) +

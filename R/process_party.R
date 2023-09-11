@@ -5,13 +5,43 @@
 #'
 #' @param data A wave of ISSP data.
 #' @param pty_cols The names of the party affiliation columns in the ISSP wave.
-#' @param use_attr Logical. Should country codes be matched to attributes of party affiliation columns (see details)?
-#' @param attr_sep A string with the delimiter separating country codes in attributes of the party affiliation column (see details).
-#' @param other_thresh The threshold below which to classify small party supporters as "Other", as a weighted proportion of the country-sample.
-#' @param recode_usa Logical. Should US party strength variable be recoded into unordered categories
+#' @param use_attr Logical. Should country codes be matched to attributes of 
+#' party affiliation columns (see details)?
+#' @param attr_sep A string with the delimiter separating country codes in 
+#' attributes of the party affiliation column (see details).
+#' @param other_thresh The threshold below which to classify small party 
+#' supporters as "Other", as a weighted proportion of the country-sample.
+#' @param recode_usa Logical. Should US party strength be recoded into 
+#' unordered categories (see details)?
 #'
 #' @details
-#' The ISSP data has a row for every respondent and a column for party affiliation in every country. This makes recoding party affiliation complicated. The same values are often used to indicate missingness within countries and rows of party affiliation columns corresponding to other countries. Part of this function matches country codes to each country's party affiliation column and recodes the values used to indicate within-country missingness. This is relatively easy during later waves of the ISSP, where ISO2 country codes are part of the names of party affiliation columns. However, country information is stored in the attributes of party affiliation columns during earlier waves such as 1993 and 2000. The \code{use_attr} argument allows the user to specify whether to use the attributes of party affiliation columns to identify the country. If \code{use_attr = TRUE}, the \code{attr_sep} argument specifies the delimiter separating country codes in the attributes of party affiliation columns. The \code{attr_sep} argument should be set to "2" for 1993 and "_" for 2000. If \code{use_attr = FALSE}, the function assumes that the party affiliation column names in the ISSP wave contain country codes.
+#' The ISSP data has a row for every respondent and a column for party 
+#' affiliation in every country. This makes recoding party affiliation 
+#' complicated. The same values are often used to indicate missingness within 
+#' countries and rows of party affiliation columns corresponding to other 
+#' countries. Part of this function matches country codes to each country's 
+#' party affiliation column and recodes the values used to indicate 
+#' within-country missingness. This is relatively easy during later waves of 
+#' the ISSP, where two-character ISO country codes are part of the names of 
+#' party affiliation columns. However, during earlier waves, country 
+#' information is stored in the attributes of party affiliation columns. The 
+#' \code{use_attr} argument allows the user to specify whether to use the 
+#' attributes of party affiliation columns to identify the country. If 
+#' \code{use_attr = TRUE}, the \code{attr_sep} argument specifies the 
+#' delimiter separating country codes in the attributes of party affiliation 
+#' columns. The \code{attr_sep} argument should be set to "2" for 1993 and 
+#' "_" for 2000. If \code{use_attr = FALSE}, the function assumes that the 
+#' party affiliation column names in the ISSP wave contain country codes.
+#' 
+#' In many ISSP waves, the United States uses a standard ordinal party 
+#' strength variable to measure party affiliation. This is distinct from the 
+#' nominal party affiliation variables used in other countries. The 
+#' \code{recode_usa} argument allows the user to specify whether to recode the 
+#' US party strength variable into nominal party affiliation categories. If 
+#' \code{recode_usa = TRUE}, the function recodes partisans, strong partisans, 
+#' and party leaners as "Democrat" and "Republican", pure independents and 
+#' those not answering the question as "None", and all other respondents as 
+#' "Other".
 #'
 #' @export
 #'
@@ -30,11 +60,14 @@ process_party <- function(
     recode_usa = TRUE
 ){
 
-  # Used to filter out countries present in an ISSP wave but not answering the party affiliation question
+  # Used to filter out countries present in an ISSP wave but not answering the 
+  # party affiliation question
   not_all_na <- function(x) any(!is.na(x))
 
-  # Recodes International Automobile Identification codes used in 1993 and 2000 to iso2c codes used in subsequent waves
-  # This covers all non-iso2c-consistent codes used in the 1993 and 2000 data, and should be updated if using other waves before the adoption of iso2c
+  # Recodes International Automobile Identification codes used in 1993 and 2000 
+  # to iso2c codes used in subsequent waves
+  # This covers all non-iso2c-consistent codes used in the 1993 and 2000 data, 
+  # and should be updated if using other waves before the adoption of iso2c
   hrmnse_ccode <- function(x) {
     y <- case_when(
       x == "D" ~ "DE",
@@ -62,12 +95,16 @@ process_party <- function(
     y
   }
 
-  # The ISSP data has a row for every respondent and a column for party affiliation in every country
+  # The ISSP data has a row for every respondent and a column for party 
+  # affiliation in every country
   # This makes recoding party affiliation complicated
-  # The same values are often used to indicate non-partisans and rows of party affiliation columns corresponding to other countries
-  # This function matches country codes to each country's party affiliation column and recodes the latter,
+  # The same values are often used to indicate non-partisans and rows of party 
+  # affiliation columns corresponding to other countries
+  # This function matches country codes to each country's party affiliation 
+  # column and recodes the latter,
   # allowing us to recode values otherwise used to indicate other country rows.
-  # The function requires the country code to be the party affiliation column name
+  # The function requires the country code to be the party affiliation column 
+  # name
   set_na <- function(df){
     # Get a vector of country codes
     cntry_col <- unique(df$ccode)
@@ -77,8 +114,10 @@ process_party <- function(
       prty_cols <- colnames(df)[colnames(df) == cntry]
       # Loop through the party affiliation columns
       for(col in prty_cols){
-        # Recode 0 and -2 to 99 when country codes match party affiliation column names
-        # 0 and -2 are used to indicate other country rows in different ISSP waves
+        # Recode 0 and -2 to 99 when country codes match party affiliation 
+        # column names
+        # 0 and -2 are used to indicate other country rows in different ISSP 
+        # waves
         df[df$ccode == cntry, col] <- sapply(
           df[df$ccode == cntry, col],
           function(x) if_else(x == 0 | x == -2, 99, x)
@@ -95,7 +134,8 @@ process_party <- function(
     select(where(not_all_na))
 
   # Rename party affiliation columns using country codes
-  # If using ISSP 1993 or 2000, use the attributes of the party columns to identify the country
+  # If using ISSP 1993 or 2000, use the attributes of the party columns to 
+  # identify the country
   if(use_attr) {
     # Create object containing party column attributes
     input |>
@@ -123,9 +163,11 @@ process_party <- function(
         .cols = -c(id, cntry, ccode, year, weight)
       )
 
-    # Else, the party affiliation column names in ISSP 2010 and 2020 already contain country codes
+    # Else, the party affiliation column names in ISSP 2010 and 2020 already 
+    # contain country codes
   } else {
-    # Strip variable suffix in party affiliation columns, leaving country codes as names
+    # Strip variable suffix in party affiliation columns, leaving country 
+    # codes as names
     colnames(input) <- gsub("_PRTY", "", colnames(input))
   }
 
@@ -142,10 +184,13 @@ process_party <- function(
       names_to = "pty_var",
       values_to = "pty_val"
     ) |>
-    # Unlike any other country, Austria provides different values for "Other Party" in 2010 and 2020: 94 and 8, respectively
+    # Unlike any other country, Austria provides different values for "Other 
+    # Party" in 2010 and 2020: 94 and 8, respectively
     # We need to be able to identify these rows when coding nonpartisans below
-    # Return the name of party affiliation variables to their original names in 2010 and 2020
-    # That way, we can find rows where pty_var == "AT_PRTY" and pty_val == 94 or 8
+    # Return the name of party affiliation variables to their original names 
+    # in 2010 and 2020
+    # That way, we can find rows where pty_var == "AT_PRTY" and pty_val == 94 
+    # or 8
     mutate(
       pty_var = if_else(
         year == 2010 | year == 2020, paste0(pty_var, "_PRTY"), pty_var
@@ -168,8 +213,10 @@ process_party <- function(
   nonpartisans <- party_numbers |>
     mutate(
       pty_val = case_when(
-        # 95 is the value used to indicate "Other" response options in all Environment Modules of the ISSP,
-        # except for Austria in 2010 and 2020, India in 2020, and Britain in 2020
+        # 95 is the value used to indicate "Other" response options in all 
+        # Environment Modules of the ISSP,
+        # except for Austria in 2010 and 2020, India in 2020, and Britain in 
+        # 2020
         pty_var == "AT_PRTY" & year == 2010 & pty_val == 94 |
           pty_var == "AT_PRTY" & year == 2020 & pty_val == 8 |
           pty_var == "IN_PRTY" & year == 2020 & pty_val == 6 |
@@ -177,8 +224,10 @@ process_party <- function(
           # 95 is used for "Would not vote" in Austria in 2010,
           # so we need to stop this value being coded as "Other"
           pty_var != "AT_PRTY" & pty_val == 95 ~ 95,
-        # This captures the nonpartisan value codes used in all Environment Modules of the ISSP
-        # This picks up all nonpartisans after we have set other country rows to missing and uncoded party affiliation values as 95
+        # This captures the nonpartisan value codes used in all Environment 
+        # Modules of the ISSP
+        # This picks up all nonpartisans after we have set other country rows 
+        # to missing and uncoded party affiliation values as 95
         pty_val > 90 | pty_val < 0 ~ 99,
         TRUE ~ pty_val
       ),
@@ -187,7 +236,8 @@ process_party <- function(
     ) |>
     # Subset to nonpartisan and uncoded party affiliation values
     filter(pty_val == 95 | pty_val == 99) |>
-    # Recode nonpartisan values to "None" and uncoded party affiliation values to "Other"
+    # Recode nonpartisan values to "None" and uncoded party affiliation values 
+    # to "Other"
     mutate(
       nonpty_val = if_else(
         pty_val == 95, "Other", "None"
@@ -206,7 +256,8 @@ process_party <- function(
     # Convert to character so we can filter out other country rows below
     mutate(pty_val = as.character(pty_val))
 
-  # Create df with party affiliation values as strings, excluding other country rows
+  # Create df with party affiliation values as strings, excluding other 
+  # country rows
   party_cleaned <- party_strings |>
     # Filter out other country rows
     anti_join(
@@ -218,7 +269,8 @@ process_party <- function(
       nonpartisans,
       by = c("id", "cntry", "ccode", "year", "weight", "pty_var")
     ) |>
-    # Replace raw nonpartisan and uncoded party affiliation labels with strings from the nonpartisan df
+    # Replace raw nonpartisan and uncoded party affiliation labels with 
+    # strings from the nonpartisan df
     mutate(
       pty_val = if_else(
         is.na(nonpty_val), pty_val, nonpty_val
@@ -231,11 +283,13 @@ process_party <- function(
   if(recode_usa) {
     # Create df with recoded USA party affiliation values
     us_party <- party_numbers |>
-      # Remove "_PRTY" suffix from pty_var to have consistent USA variable names across waves
+      # Remove "_PRTY" suffix from pty_var to have consistent USA variable 
+      # names across waves
       mutate(pty_var = str_remove(pty_var, "_PRTY")) |>
       # Filter to USA
       filter(ccode == "US" & pty_var == "US") |>
-      # Code partisans, strong partisans, and party leaners as "Democrat" and "Republican"
+      # Code partisans, strong partisans, and party leaners as "Democrat" 
+      # and "Republican"
       # Code pure independents and those not answering the question as "None"
       # Code all other respondents as "Other"
       mutate(
@@ -248,13 +302,15 @@ process_party <- function(
       ) |>
       select(-pty_var, -pty_val)
 
-    # Join USA party affiliation values with party affiliation values for all other countries
+    # Join USA party affiliation values with party affiliation values 
+    # for all other countries
     party_cleaned <- party_cleaned |>
       left_join(
         us_party,
         by = c("id", "cntry", "ccode", "year", "weight")
       ) |>
-      # Replace raw USA party affiliation labels with strings from the USA party df
+      # Replace raw USA party affiliation labels with strings from 
+      # the USA party df
       mutate(
         pty_val = if_else(
           is.na(us_pid), pty_val, us_pid
@@ -264,17 +320,21 @@ process_party <- function(
 
   }
   # We want to minimize the number of party affiliation categories
-  # We will recode all categories with a frequency below a certain threshold as "Other"
+  # We will recode all categories with a frequency below a certain 
+  # threshold as "Other"
   # Create df with party affiliation frequencies
   party_reduced <- party_cleaned |>
-    # Use survey package to weight observations using post-stratification weights
+    # Use survey package to weight observations using 
+    # post-stratification weights
     as_survey_design(weights = weight) |>
-    # Count number of observations in each party affiliation category by country
+    # Count number of observations in each party affiliation category 
+    # by country
     survey_count(ccode, pty_val) |>
     mutate(
       # Calculate frequency of each party affiliation category by country
       freq = n / sum(n),
-      # Code party affiliation categories with a frequency below the threshold as "Other"
+      # Code party affiliation categories with a frequency below the 
+      # threshold as "Other"
       new_pty = case_when(
         pty_val %in% c("Other", "None") ~ pty_val,
         freq < other_thresh ~ "Other",
@@ -284,7 +344,8 @@ process_party <- function(
     ) |>
     select(ccode, pty_val, new_pty)
 
-  # Create new country-party affiliation variable with reduced number of categories
+  # Create new country-party affiliation variable with reduced number 
+  # of categories
   output <- party_cleaned |>
     left_join(
       party_reduced,

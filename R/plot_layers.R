@@ -1,14 +1,21 @@
 #' @title plot_layers
 #' 
-#' @description Takes a ggplot2 object as input and adds specified geom layers that can highlight missingness in the data.
+#' @description Takes a \code{ggplot2} object as input and adds specified geom 
+#' layers that can highlight missingness in the data.
 #' 
-#' @param p A ggplot2 object.
-#' @param points Name of the variable containing values of the points to draw for each group.
-#' @param line Name of the variable containing values of the line to draw for each group.
-#' @param ci_upper Name of the variable containing the upper bound of the credible interval of the median regression line for each group.
-#' @param ci_lower Name of the variable containing the lower bound of the credible interval of the median regression line for each group.
+#' @param p A \code{ggplot2} object.
+#' @param points Name of the variable containing values of the points to draw 
+#' for each group.
+#' @param line Name of the variable containing values of the line to draw 
+#' for each group.
+#' @param ci_upper Name of the variable containing the upper bound of the 
+#' credible interval of the median regression line for each group.
+#' @param ci_lower Name of the variable containing the lower bound of the 
+#' credible interval of the median regression line for each group.
 #' @param hline A value along which to draw a horizontal line on the y-axis.
-#' @param missingness_var A variable containing median values along the regression line for each group, for when you want to make the line and credible interval less promiment outside the range of available data.
+#' @param missingness_var A variable containing median values along the 
+#' regression line for each group, for when you want to make the line and 
+#' credible interval less promiment outside the range of available data.
 #'
 #' @export
 #'
@@ -64,7 +71,8 @@ plot_layers <- function(
     }
   }
 
-  # Draws two ribbons around the credible interval of the regression line for each group
+  # Draws two ribbons around the credible interval of the regression line 
+  # for each group
   if(!quo_is_null(ci_upper_quo) & !quo_is_null(ci_lower_quo)) {
     # If highlighting missingness
     if(!quo_is_null(missingness_var_quo)) {

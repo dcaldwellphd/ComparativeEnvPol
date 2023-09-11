@@ -4,7 +4,8 @@
 #' Recodes attitude items in an ISSP wave using values from a CSV file.
 #'
 #' @param data A wave of ISSP data.
-#' @param issp_name Name of the column in the csv file containing ISSP attitude item names for the wave.
+#' @param issp_name Name of the column in the CSV file containing ISSP 
+#' attitude item names for the wave.
 #' @param csv The csv file used to recode the wave of ISSP data.
 #'
 #' @export
@@ -37,7 +38,8 @@ process_ideology <- function(
 
   # A vector of strings containing the names of attitude items in the ISSP wave
   the_items <- csv |>
-    filter({{issp_name}} != "") |> # Attitude items not present in the ISSP wave
+    filter({{issp_name}} != "") |> 
+    # Attitude items not present in the ISSP wave
     pull({{issp_name}})
 
   output <- data |>
@@ -45,7 +47,7 @@ process_ideology <- function(
       id, cntry, ccode, year,
       any_of(the_items), weight
     ) |>
-    # Remove conflicting value labels by converting attitude item columns to numeric
+    # Remove conflicting value labels by converting attitude item columns
     # Prevents warnings when pivoting longer below
     mutate(across(any_of(the_items), as.numeric)) |>
     # Gather available attitude items into a single column

@@ -1,7 +1,8 @@
 #' @title make_plot
 #' 
 #' @description
-#' A wrapper around \code{plot_structure}, \code{plot_layers}, and \code{plot_scales}, with default values set to common use cases in the paper.
+#' A wrapper around \code{plot_structure}, \code{plot_layers}, and 
+#' \code{plot_scales}, with default values set to common use cases in the paper.
 #' 
 #' 
 #' @param data A data set containing the information to be plotted.
@@ -12,14 +13,22 @@
 #' @param linetype Name of the column for an optional linetype aesthetic.
 #' @param shape Name of the column for an optional shape aesthetic.
 #' @param group Name of the column for an optional group aesthetic.
-#' @param facet_vars A set of variables or expressions quoted by `ggplot2::vars` and defining faceting groups.
-#' @param ncol An option to set the number of panels in a row when using facet_wrap.
-#' @param points Name of the variable containing values of the points to draw for each group.
-#' @param line Name of the variable containing values of the line to draw for each group.
-#' @param ci_upper Name of the variable containing the upper bound of the credible interval of the median regression line for each group.
-#' @param ci_lower Name of the variable containing the lower bound of the credible interval of the median regression line for each group.
+#' @param facet_vars A set of variables or expressions quoted by 
+#' \code{ggplot2::vars} and defining faceting groups.
+#' @param ncol An option to set the number of panels in a row when using 
+#' facet_wrap.
+#' @param points Name of the variable containing values of the points to draw 
+#' for each group.
+#' @param line Name of the variable containing values of the line to draw 
+#' for each group.
+#' @param ci_upper Name of the variable containing the upper bound of the 
+#' credible interval of the median regression line for each group.
+#' @param ci_lower Name of the variable containing the lower bound of the 
+#' credible interval of the median regression line for each group.
 #' @param hline A value along which to draw a horizontal line on the y-axis.
-#' @param missingness_var A variable containing median values along the regression line for each group, for when you want to make the line and credible interval less promiment outside the range of available data.
+#' @param missingness_var A variable containing median values along the 
+#' regression line for each group, for when you want to make the line and 
+#' credible interval less promiment outside the range of available data.
 #' @param breaks A character vector of breaks.
 #' @param linetype_values A set of aesthetic values mapping linetypes to breaks.
 #' @param fill_values A set of aesthetic values mapping fills to breaks.
@@ -27,7 +36,8 @@
 #' @param color_values A set of aesthetic values mapping colors to breaks.
 #' @param shape_values A set of aesthetic values mapping shapes to breaks.
 #' @param labels A character vector of labels for the breaks.
-#' @param ndecade_to_years Logical. Do you want to display the number of decades as years on the x-axis?
+#' @param ndecade_to_years Logical. Do you want to display the number of 
+#' decades as years on the x-axis?
 #' @param ylab A string or expression to use as the y-axis label.
 #' @param ylim A vector of values to use as the y-axis limits.
 #' 
@@ -53,14 +63,8 @@ make_plot <- function(
   hline = 0,
   missingness_var = point_when_nonmissing,
   breaks = c("baseline", "comparison"),
-  linetype_values = c(
-      "baseline" = "solid",
-      "comparison" = "dashed"
-      ),
-  fill_values = c(
-      "baseline" = "navyblue",
-      "comparison" = "pink1"
-      ),
+  linetype_values = c("baseline" = "solid", "comparison" = "dashed"),
+  fill_values = c("baseline" = "navyblue", "comparison" = "pink1"),
   group_values = NULL,
   color_values = NULL,
   shape_values = NULL,
