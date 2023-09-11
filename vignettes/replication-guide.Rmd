@@ -1,0 +1,38 @@
+---
+title: "Replicating our paper using the ComparativeEnvPol package"
+author: "David Caldwell, Gidon Cohen, Nick Vivyan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Replicating our paper using the ComparativeEnvPol package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{R,echo=FALSE,results='hide',message=FALSE,include=FALSE, eval=TRUE}
+if (!require(knitr))
+  install.packages("knitr")
+if (!require(pak))
+  install.packages("pak")
+```
+
+## Overview
+
+This package is the repository of replication code and data for an ongoing project analyzing comparative trends in the political polarization of climate change using data from the International Social Survey Programme (ISSP).
+
+## Installation
+
+The package can be installed directly from [GitHub](https://github.com/dcaldwellphd/ComparativeEnvPol)
+
+```{r, message=FALSE, warning=FALSE, results = "hide", eval=FALSE}
+pak::pak("dcaldwellphd/ComparativeEnvPol")
+
+library(ComparativeEnvPol)
+```

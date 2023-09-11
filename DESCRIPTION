@@ -1,11 +1,59 @@
 Package: ComparativeEnvPol
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Functions and data for the analysis of political polarization on climate change using ISSP data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: c(
+    person(
+      "David", 
+      "Caldwell", 
+      email = "dcaldwellphd@gmail.com", 
+      role = c("cre","aut")
+      ),
+    person(
+      "Gidon", 
+      "Cohen", 
+      email = "gidon.cohen@durham.ac.uk", 
+      role = "aut"
+      ),
+    person(
+      "Nick",
+      "Vivyan",
+      email = "nick.vivyan@durham.ac.uk",
+      role = "aut"
+      )
+    )
+Description: This package is the repository of replication code and data for an ongoing project
+  analyzing comparative trends in the political polarization of climate change using data from
+  the International Social Survey Programme.
+License: GPL-3
+URL: https://github.com/dcaldwellphd/ComparativeEnvPol
+BugReports: https://github.com/dcaldwellphd/ComparativeEnvPol/issues
+Depends:
+  R (>= 4.1.0)
+Imports:
+    cli,
+    countrycode,
+    dplyr,
+    ggplot2,
+    glue,
+    haven,
+    labelled,
+    lifecycle,
+    purrr,
+    rlang,
+    scales,
+    srvyr,
+    stringr (>= 1.4.0),
+    survey,
+    tibble,
+    tidybayes,
+    tidyr (>= 0.6.0),
+    tidyselect,
+    withr
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.2.3
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
