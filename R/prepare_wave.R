@@ -2,8 +2,8 @@
 #'
 #' @description
 #' Performs a number of miscellaneous operations on a wave of ISSP data,
-#' establishing consistent country codes and names, creating an id and year
-#' column for keeping track of observations when joining waves together, and
+#' establishing consistent country codes and names, creating id and year
+#' columns for keeping track of observations when joining waves together, and
 #' applying a consistent name and numeric class to the column containing
 #' post-stratification weights.
 #'
@@ -94,6 +94,7 @@ prepare_wave <- function(
         # Create id column with values that are unique to the wave
         rownames_to_column("id") |>
         mutate(
+            id = paste0(id, "_", year_value),
             # Recode weight column to be consistent across waves
             weight = {{weight_col}},
             weight = as.numeric(weight),
