@@ -31,7 +31,7 @@ efx_to_obs <- function(
   obs_data = multiparty_pol,
   efx_data = mp_grhseff2_efx,
   filter_obs_to = "att_item == 'grhseff2'",
-  add_stars_on = slpe_pos95
+  add_stars_on = slope_pos95
 ) {
 
   # Defuse column passed to add_stars_on

@@ -101,7 +101,7 @@ efx_to_efx <- function(
 
     if (!is.null(add_stars_on)) {
       # Identify countries with positive slope in the baseline model
-      pos_slpe_cases <- baseline |>
+      pos_slope_cases <- baseline |>
         filter(eff_type == "ccode", {{ add_stars_on }}) |>
         pull(eff_group) |>
         unique()
@@ -111,7 +111,7 @@ efx_to_efx <- function(
       output <- output |>
         mutate(
           cntry = if_else(
-            eff_group %in% pos_slpe_cases, paste0(cntry, "*"), cntry
+            eff_group %in% pos_slope_cases, paste0(cntry, "*"), cntry
             )
           )
     }
