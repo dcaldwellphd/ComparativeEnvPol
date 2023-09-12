@@ -40,7 +40,7 @@ cntry_item_filter <- function(
     select({{att_col}}, {{cntry_col}}, {{wave_col}}) |>
     distinct() |>
     mutate(
-      n_morethan1 = if_else(cumsum(n()) > 1, TRUE, FALSE),
+      n_morethan1 = if_else(cumsum(dplyr::n()) > 1, TRUE, FALSE),
       .by = c({{att_col}}, {{cntry_col}})
     ) |>
     distinct(
