@@ -22,16 +22,22 @@ recode_alt_usa_pid <- function(
     select(id, ccode, {{ usa_pid }}) |> 
     mutate(
       {{usa_pid}} := as.numeric({{usa_pid}}),
-      pid_no_lean = case_when(
+      pid_nolean = case_when(
         {{usa_pid}} %in% c(1:2) ~ "Democrat",
         {{usa_pid}} %in% c(3, 4, 5, 99) ~ "None",
         {{usa_pid}} %in% c(6:7) ~ "Republican",
         {{usa_pid}} == 0 ~ NA,
       TRUE ~ "Other"
       ),
-      pid_no_lean = paste0(ccode, "_", pid_no_lean),
-      pid_strength = if_else({{ usa_pid }} %in% c(1:7), {{ usa_pid }}, NA)
+      pid_nolean = paste0(ccode, "_", pid_nolean),
+      pid_strength = if_else({{ usa_pid }} %in% c(1:7), {{ usa_pid }}, NA),
+      pid_strength = as.character(pid_strength)
       ) |> 
-    select(-{{ usa_pid }})
+    select(-{{ usa_pid }}) |> 
+    pivot_longer(
+      cols = c(pid_nolean, pid_strength),
+      names_to = "alt_pid_type",
+      values_to = "alt_pid_value"
+      )
 
 }
