@@ -209,14 +209,15 @@ summarise_trends <- function(
         ) |>
         # Calculate median slope for each group
         summarise(
-            slope = median(c_b),
+            slope_med = median(c_b),
+            slope_mean = mean(c_b),
             .by = group
         ) |>
         # Order slopes from largest to smallest
-        arrange(desc(slope)) |>
+        arrange(desc(slope_med)) |>
         # Create column containing the order of groups
-        mutate(order = seq(1, length(slope), 1)) |>
-        select(group, order)
+        mutate(order = seq(1, length(slope_med), 1)) |>
+        select(group, order, slope_med, slope_mean)
 
     # Create object containing dummy variables for whether the credible 
     # interval of the slope for each group encompasses 0
@@ -228,17 +229,24 @@ summarise_trends <- function(
         ) |>
         # Calculate lower bounds of the credible interval for each group
         summarise(
-            slpe_pos90 = quantile(c_b, 0.05),
-            slpe_pos95 = quantile(c_b, 0.025),
+            slope_lo90 = quantile(c_b, 0.05),
+            slope_hi90 = quantile(c_b, 0.95),
+            slope_lo95 = quantile(c_b, 0.025),
+            slope_hi95 = quantile(c_b, 0.975),
             .by = group
         ) |>
         # Create dummy variable for whether the lower bound of the credible 
         # interval is positive
         mutate(
-            slpe_pos90 = slpe_pos90 > 0,
-            slpe_pos95 = slpe_pos95 > 0
+            slope_pos90 = slope_lo90 > 0,
+            slope_pos95 = slope_lo95 > 0
         ) |>
-        select(group, slpe_pos90, slpe_pos95)
+        select(
+            group,
+            slope_lo90, slope_hi90,
+            slope_lo95, slope_hi95,
+            slope_pos90, slope_pos95
+            )
 
     output <- output |>
         # Add column containing the order of group slopes to output
