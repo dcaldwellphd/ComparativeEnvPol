@@ -16,6 +16,8 @@
 #' comparison models.
 #' @param comparison_labels A string or vector of strings to label rows 
 #' summarizing the comparison model(s).
+#' @param add_stars_on A variable indicating which country-slopes have a 
+#' credible interval above zero (see details).
 #' 
 #' @details
 #' Many plots in the paper compare climate concern polarization trends with 
@@ -24,10 +26,22 @@
 #' the posterior distributions from different models involves a lot of 
 #' repetitive data wrangling, which is automated by the \code{efx_to_efx} 
 #' function.
+#' 
+#' The output is ordered by the median slope for countries from the baseline 
+#' model, which is the climate danger partisan polarization model by default.
+#' You can create a plot with a different order of countries by supplying a
+#' different posterior summary to the \code{baseline} argument.
+#' 
+#' The \code{\link{summarise_trends}} function adds dummy variables to
+#' the posterior summary of a model, indicating which groups have 90% and
+#' 95% credible intervals above zero. Providing one of these variables to
+#' the \code{add_stars_on} argument of \code{efx_to_obs} will paste an
+#' asterisk to country names showing that the credible interval of their
+#' slope is positive in the baseline model.
 #'
 #' @export
 #'
-#' @importFrom dplyr mutate bind_rows select filter across
+#' @importFrom dplyr mutate bind_rows select filter across arrange pull if_else
 #' @importFrom purrr map2_df
 
 efx_to_efx <- function(
@@ -36,13 +50,17 @@ efx_to_efx <- function(
   baseline_label = "baseline",
   comparisons,
   comparison_obs = multiparty_pol,
-  comparison_labels = "comparison"
+  comparison_labels = "comparison",
+  add_stars_on = NULL
 ) {
   
   # Check if comparisons is a data frame. If so, convert it into a list.
   if (is.data.frame(comparisons)) {
     comparisons <- list(comparisons)
   }
+
+  # Defuse column passed to add_stars_on
+  add_stars_on <- substitute(add_stars_on)
 
   output <- baseline |>
     # Filter to country effects
@@ -63,7 +81,7 @@ efx_to_efx <- function(
       map2_df(comparisons, comparison_labels, ~.x |>
         # The plot is ordered by baseline slopes.
         # Remove the order column from comparison
-        select(-order) |>
+        select(-order, -{{ add_stars_on }}) |>
         # Filter to country effects
         filter(eff_type == "ccode") |>
         # Create column of country names using country codes included in the 
@@ -79,14 +97,35 @@ efx_to_efx <- function(
         # Add column to distinguish comparison from baseline trends
         mutate(pol_type = .y)
       )
-    ) |>
+    )
+
+    if (!is.null(add_stars_on)) {
+      # Identify countries with positive slope in the baseline model
+      pos_slpe_cases <- baseline |>
+        filter(eff_type == "ccode", {{ add_stars_on }}) |>
+        pull(eff_group) |>
+        unique()
+        
+      # Paste asterisk to country names when their 95% credible interval is 
+      # above zero
+      output <- output |>
+        mutate(
+          cntry = if_else(
+            eff_group %in% pos_slpe_cases, paste0(cntry, "*"), cntry
+            )
+          )
+    }
+
     # Order country names by the size of their median slope in the climate 
     # partisan polarization model
-    mutate(
-      across(
-        cntry, ~factor(
-          .x, levels = unique(cntry[order(order)])
-        )
-      )
-    )
+    output <- output |> 
+      mutate(
+        across(
+          cntry, ~factor(
+            .x, levels = unique(cntry[order(order)])
+            )
+          )
+        ) |>
+      arrange(order)
+
 }
