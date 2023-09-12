@@ -48,7 +48,7 @@ efx_to_obs <- function(
     # Add posterior summary to observed data
     full_join(
       efx_data |>
-      ccode_to_cntry(eff_group) |>
+      mutate(cntry = ccode_to_cntry(eff_group)) |>
       mutate(
         # Create joining year and ndecade columns
         year = 1993 + x * 10,

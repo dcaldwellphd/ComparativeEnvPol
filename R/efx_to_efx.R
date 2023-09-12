@@ -66,7 +66,7 @@ efx_to_efx <- function(
     # Filter to country effects
     filter(eff_type == "ccode") |>
     # Convert country codes to country names
-    ccode_to_cntry(eff_group) |>
+    mutate(cntry = ccode_to_cntry(eff_group)) |>
     # Add column with the median fitted trend for each country when it is 
     # present in a survey wave
     add_point_when_nonmissing(
@@ -86,7 +86,7 @@ efx_to_efx <- function(
         filter(eff_type == "ccode") |>
         # Create column of country names using country codes included in the 
         # model
-        ccode_to_cntry(eff_group) |>
+        mutate(cntry = ccode_to_cntry(eff_group)) |>
         # Add column with the median fitted trend for each country when it is 
         # present in a survey wave
         add_point_when_nonmissing(
