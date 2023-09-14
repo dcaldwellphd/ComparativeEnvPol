@@ -7,15 +7,19 @@
 efx_to_obs(
   obs_data = multiparty_pol,
   efx_data = mp_grhseff2_efx,
-  filter_obs_to = "grhseff2"
+  filter_obs_to = "att_item == 'grhseff2'",
+  add_stars_on = slope_pos95
 )
 }
 \arguments{
 \item{obs_data}{A data frame containing the observed data used to fit 
 the model.}
 
-\item{filter_obs_to}{An optional string to filter the observed data to a 
-selection of attitude items.}
+\item{filter_obs_to}{An optional string specifying a filter 
+condition for the \code{obs_data} object.}
+
+\item{add_stars_on}{A variable indicating which country-slopes have a 
+credible interval above zero (see details).}
 
 \item{baseline}{A data frame containing the summary of the posterior 
 distribution of country effects from the model.}
@@ -23,4 +27,12 @@ distribution of country effects from the model.}
 \description{
 Automates the data wrangling required to compare country effects from a 
 model with the observed data used to fit it.
+}
+\details{
+The \code{\link{summarise_trends}} function adds dummy variables to
+the posterior summary of a model, indicating which groups have 90% and
+95% credible intervals above zero. Providing one of these variables to
+the \code{add_stars_on} argument of \code{efx_to_obs} will paste an
+asterisk to country names showing that the credible interval of their
+slope is positive.
 }

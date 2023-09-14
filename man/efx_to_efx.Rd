@@ -10,7 +10,8 @@ efx_to_efx(
   baseline_label = "baseline",
   comparisons,
   comparison_obs = multiparty_pol,
-  comparison_labels = "comparison"
+  comparison_labels = "comparison",
+  add_stars_on = NULL
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ comparison models.}
 
 \item{comparison_labels}{A string or vector of strings to label rows 
 summarizing the comparison model(s).}
+
+\item{add_stars_on}{A variable indicating which country-slopes have a 
+credible interval above zero (see details).}
 }
 \description{
 Automates the data wrangling required to compare country effects from 
@@ -43,4 +47,16 @@ ideological constraint of climate-related attitudes. Joining summaries of
 the posterior distributions from different models involves a lot of 
 repetitive data wrangling, which is automated by the \code{efx_to_efx} 
 function.
+
+The output is ordered by the median slope for countries from the baseline 
+model, which is the climate danger partisan polarization model by default.
+You can create a plot with a different order of countries by supplying a
+different posterior summary to the \code{baseline} argument.
+
+The \code{\link{summarise_trends}} function adds dummy variables to
+the posterior summary of a model, indicating which groups have 90% and
+95% credible intervals above zero. Providing one of these variables to
+the \code{add_stars_on} argument of \code{efx_to_obs} will paste an
+asterisk to country names showing that the credible interval of their
+slope is positive in the baseline model.
 }
