@@ -8,18 +8,12 @@
 #' distribution of country effects from the baseline model.
 #' @param baseline_obs A data frame containing the observed data used to fit 
 #' the the baseline model.
-#' @param baseline_x The variable used to model time in the baseline, passed
-#' to the \code{time_counter} argument of 
-#' \code{\link{add_point_when_nonmissing}}.
 #' @param baseline_label A string to label rows summarizing the baseline model.
 #' @param comparisons A single data frame or list of data frames containing 
 #' the summary of the posterior distribution of country effects from the 
 #' comparison models.
 #' @param comparison_obs A data frame containing the observed data used to fit 
 #' comparison models.
-#' @param comparison_x The variable used to model time in the comparison, passed
-#' to the \code{time_counter} argument of 
-#' \code{\link{add_point_when_nonmissing}}.
 #' @param comparison_labels A string or vector of strings to label rows 
 #' summarizing the comparison model(s).
 #' @param add_stars_on A variable indicating which country-slopes have a 
@@ -53,11 +47,9 @@
 efx_to_efx <- function(
   baseline = mp_grhseff2_efx,
   baseline_obs = multiparty_pol,
-  baseline_x = x,
   baseline_label = "baseline",
   comparisons,
   comparison_obs = multiparty_pol,
-  comparison_x = x,
   comparison_labels = "comparison",
   add_stars_on = NULL
 ) {
@@ -80,7 +72,7 @@ efx_to_efx <- function(
     add_point_when_nonmissing(
       observed_data = baseline_obs,
       group = cntry,
-      time_counter = {{ baseline_x }}
+      time_counter = x
     ) |>
     # Add column to distinguish baseline from comparison trends
     mutate(pol_type = baseline_label) |>
@@ -100,7 +92,7 @@ efx_to_efx <- function(
         add_point_when_nonmissing(
           observed_data = comparison_obs,
           group_col = cntry,
-          time_counter = {{ comparison_x }}
+          time_counter = x
         ) |>
         # Add column to distinguish comparison from baseline trends
         mutate(pol_type = .y)
