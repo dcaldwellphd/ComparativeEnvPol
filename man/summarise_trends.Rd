@@ -26,6 +26,15 @@ median and credible interval.}
 (e.g., the overall mean in the data).}
 }
 \description{
-Takes a multilevel \code{stanreg} object as input and returns the median 
-and credible interval of time trends for each group.
+Takes a multilevel \code{stanreg} object as input and summarises the
+posterior distribution of linear time trends for each group in the
+model (see details).
+}
+\details{
+The main approach to modelling polarization in the paper is to predict
+some statistical outcome using a multilevel model with the number of
+decades from 1993 as a scalar independent variable. This function
+summarises the rergession line of each group along values of this 
+independent variable. For models where polarization is predicted 
+using dummy variables for each year, see \code{\link{summarise_years}}.
 }
