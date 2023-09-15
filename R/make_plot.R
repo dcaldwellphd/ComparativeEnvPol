@@ -206,23 +206,24 @@
                      aes(ymin = {{ ci_lower }}, ymax = {{ ci_upper }}),
                      alpha = .3 
                  )
+         } else {
+             p <- p +
+             geom_ribbon(
+               aes(
+                 ymin = {{ ci_lower }},
+                 ymax = {{ ci_upper }}
+               ),
+               alpha = .1
+             ) +
+             geom_ribbon(
+               data = . %>% filter(!is.na({{ y }})),
+               aes(
+                 ymin = {{ ci_lower }},
+                 ymax = {{ ci_upper }}
+               ),
+               alpha = .3
+             )
          }
-       p <- p +
-       geom_ribbon(
-         aes(
-           ymin = {{ ci_lower }},
-           ymax = {{ ci_upper }}
-         ),
-         alpha = .1
-       ) +
-       geom_ribbon(
-         data = . %>% filter(!is.na({{ y }})),
-         aes(
-           ymin = {{ ci_lower }},
-           ymax = {{ ci_upper }}
-         ),
-         alpha = .3
-       )
      } else {
          if (use_linerange) {
              p <- p +
@@ -230,15 +231,16 @@
                      aes(ymin = {{ ci_lower }}, ymax = {{ ci_upper }}),
                      alpha = .3
                  )
+         } else {
+             p <- p +
+             geom_ribbon(
+               aes(
+                 ymin = {{ ci_lower }},
+                 ymax = {{ ci_upper }}
+               ),
+               alpha = .3
+             )
          }
-       p <- p +
-       geom_ribbon(
-         aes(
-           ymin = {{ ci_lower }},
-           ymax = {{ ci_upper }}
-         ),
-         alpha = .3
-       )
      }
    }
 
