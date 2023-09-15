@@ -1,22 +1,32 @@
 #' @title efx_to_efx
 #' 
 #' @description
-#' Automates the data wrangling required to compare country effects from 
+#' Automates the data wrangling required to compare group effects from 
 #' different models (see details).
 #' 
 #' @param baseline A data frame containing the summary of the posterior 
-#' distribution of country effects from the baseline model.
+#' distribution of group effects from the baseline model.
 #' @param baseline_obs A data frame containing the observed data used to fit 
 #' the the baseline model.
+#' @param filter_baseline_obs_to An optional string specifying a filter 
+#' condition for the \code{baseline_obs} object. It is only really necessary
+#' when plotting points, in which case it prevents data that that isn't part
+#' of the baseline model from being plotted.
 #' @param baseline_label A string to label rows summarizing the baseline model.
 #' @param comparisons A single data frame or list of data frames containing 
-#' the summary of the posterior distribution of country effects from the 
+#' the summary of the posterior distribution of group effects from the 
 #' comparison models.
 #' @param comparison_obs A data frame containing the observed data used to fit 
 #' comparison models.
+#' @param filter_comparison_obs_to An optional string specifying a filter 
+#' condition for the \code{comparison_obs} object. It is only really necessary
+#' when plotting points, in which case it prevents data that that isn't part
+#' of comparison models from being plotted.
 #' @param comparison_labels A string or vector of strings to label rows 
 #' summarizing the comparison model(s).
-#' @param add_stars_on A variable indicating which country-slopes have a 
+#' @param group A string identifying the grouping variable being summarised
+#' from the model.
+#' @param add_stars_on A variable indicating which group-slopes have a 
 #' credible interval above zero (see details).
 #' 
 #' @details
@@ -36,13 +46,14 @@
 #' the posterior summary of a model, indicating which groups have 90% and
 #' 95% credible intervals above zero. Providing one of these variables to
 #' the \code{add_stars_on} argument of \code{efx_to_obs} will paste an
-#' asterisk to country names showing that the credible interval of their
+#' asterisk to group names showing that the credible interval of their
 #' slope is positive in the baseline model.
 #'
 #' @export
 #'
 #' @importFrom dplyr mutate bind_rows select filter across arrange pull if_else
 #' @importFrom purrr map2_df
+#' @importFrom rlang sym
 
 efx_to_efx <- function(
   baseline = mp_grhseff2_efx,

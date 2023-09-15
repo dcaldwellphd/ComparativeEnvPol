@@ -6,8 +6,8 @@
 \usage{
 make_plot(
   data,
-  x = x,
-  y = mid,
+  x = ndecade,
+  y = adj_r2,
   color = NULL,
   fill = pol_type,
   linetype = pol_type,
@@ -19,8 +19,9 @@ make_plot(
   line = mid,
   ci_upper = upper95,
   ci_lower = lower95,
+  use_linerange = FALSE,
   hline = 0,
-  missingness_var = point_when_nonmissing,
+  highlight_missingness = TRUE,
   breaks = c("baseline", "comparison"),
   linetype_values = c(baseline = "solid", comparison = "dashed"),
   fill_values = c(baseline = "navyblue", comparison = "pink1"),
@@ -68,11 +69,13 @@ credible interval of the median regression line for each group.}
 \item{ci_lower}{Name of the variable containing the lower bound of the 
 credible interval of the median regression line for each group.}
 
+\item{use_linerange}{Logical. Do you want to draw vertical lines along
+the credible interval at each value of x?}
+
 \item{hline}{A value along which to draw a horizontal line on the y-axis.}
 
-\item{missingness_var}{A variable containing median values along the 
-regression line for each group, for when you want to make the line and 
-credible interval less promiment outside the range of available data.}
+\item{highlight_missingness}{Logical. Do you want to highlight missing
+values in the data?}
 
 \item{breaks}{A character vector of breaks.}
 
@@ -96,6 +99,8 @@ decades as years on the x-axis?}
 \item{ylim}{A vector of values to use as the y-axis limits.}
 }
 \description{
-A wrapper around \code{plot_structure}, \code{plot_layers}, and 
-\code{plot_scales}, with default values set to common use cases in the paper.
+Creates a \code{ggplot2} object with any specified faceting and 
+aesthetics, adds specified geom layers that can highlight 
+missingness in the data, and sets scales and labels for axes 
+and geom layers.
 }

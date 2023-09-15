@@ -7,47 +7,53 @@
 efx_to_efx(
   baseline = mp_grhseff2_efx,
   baseline_obs = multiparty_pol,
-  baseline_x = x,
+  filter_baseline_obs_to = NULL,
   baseline_label = "baseline",
   comparisons,
   comparison_obs = multiparty_pol,
-  comparison_x = x,
+  filter_comparison_obs_to = NULL,
   comparison_labels = "comparison",
+  group = "ccode",
   add_stars_on = NULL
 )
 }
 \arguments{
 \item{baseline}{A data frame containing the summary of the posterior 
-distribution of country effects from the baseline model.}
+distribution of group effects from the baseline model.}
 
 \item{baseline_obs}{A data frame containing the observed data used to fit 
 the the baseline model.}
 
-\item{baseline_x}{The variable used to model time in the baseline, passed
-to the \code{time_counter} argument of 
-\code{\link{add_point_when_nonmissing}}.}
+\item{filter_baseline_obs_to}{An optional string specifying a filter 
+condition for the \code{baseline_obs} object. It is only really necessary
+when plotting points, in which case it prevents data that that isn't part
+of the baseline model from being plotted.}
 
 \item{baseline_label}{A string to label rows summarizing the baseline model.}
 
 \item{comparisons}{A single data frame or list of data frames containing 
-the summary of the posterior distribution of country effects from the 
+the summary of the posterior distribution of group effects from the 
 comparison models.}
 
 \item{comparison_obs}{A data frame containing the observed data used to fit 
 comparison models.}
 
-\item{comparison_x}{The variable used to model time in the comparison, passed
-to the \code{time_counter} argument of 
-\code{\link{add_point_when_nonmissing}}.}
+\item{filter_comparison_obs_to}{An optional string specifying a filter 
+condition for the \code{comparison_obs} object. It is only really necessary
+when plotting points, in which case it prevents data that that isn't part
+of comparison models from being plotted.}
 
 \item{comparison_labels}{A string or vector of strings to label rows 
 summarizing the comparison model(s).}
 
-\item{add_stars_on}{A variable indicating which country-slopes have a 
+\item{group}{A string identifying the grouping variable being summarised
+from the model.}
+
+\item{add_stars_on}{A variable indicating which group-slopes have a 
 credible interval above zero (see details).}
 }
 \description{
-Automates the data wrangling required to compare country effects from 
+Automates the data wrangling required to compare group effects from 
 different models (see details).
 }
 \details{
@@ -67,6 +73,6 @@ The \code{\link{summarise_trends}} function adds dummy variables to
 the posterior summary of a model, indicating which groups have 90% and
 95% credible intervals above zero. Providing one of these variables to
 the \code{add_stars_on} argument of \code{efx_to_obs} will paste an
-asterisk to country names showing that the credible interval of their
+asterisk to group names showing that the credible interval of their
 slope is positive in the baseline model.
 }
