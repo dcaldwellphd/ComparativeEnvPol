@@ -80,8 +80,8 @@ summarise_years <- function(mod, ci_width = 0.95){
         names = c("eff_type", "eff_group")
         ) |> 
     rename(
-        ci_lo = .lower,
-        ci_hi = .upper
+        lower = .lower,
+        upper = .upper
         ) |> 
     select(-.width, -.point, -.interval)
   
