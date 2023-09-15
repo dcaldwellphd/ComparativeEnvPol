@@ -1,16 +1,16 @@
 #' @title efx_to_obs
 #' 
 #' @description
-#' Automates the data wrangling required to compare country effects from a 
-#' model with the observed data used to fit it.
+#' Joins the summary of a set of group effects from a multilevel model to the observed data used to fit it.
 #' 
-#' @param obs_data A data frame containing the observed data used to fit 
-#' the model.
-#' @param baseline A data frame containing the summary of the posterior 
-#' distribution of country effects from the model.
+#' @param model_summary A model summary created by \code{summarise_trends} or 
+#' a related function.
+#' @param observed_data The data used to fit the model summarised in 
+#' \code{model_summary}.
+#' @param group The grouping variable from the model as a string.
 #' @param filter_obs_to An optional string specifying a filter 
 #' condition for the \code{obs_data} object.
-#' @param add_stars_on A variable indicating which country-slopes have a 
+#' @param add_stars_on A variable indicating which group-slopes have a 
 #' credible interval above zero (see details).
 #' 
 #' @details
@@ -20,75 +20,94 @@
 #' the \code{add_stars_on} argument of \code{efx_to_obs} will paste an
 #' asterisk to country names showing that the credible interval of their
 #' slope is positive.
-#'
+#' 
 #' @export
-#'
-#' @importFrom dplyr filter full_join mutate select across if_else
-#' @importFrom tidyselect contains
-#' @importFrom rlang parse_expr
+#' 
+#' @importFrom dplyr rename mutate left_join
+#' @importFrom rlang sym parse_expr
 
 efx_to_obs <- function(
-  obs_data = multiparty_pol,
-  efx_data = mp_grhseff2_efx,
-  filter_obs_to = "att_item == 'grhseff2'",
-  add_stars_on = slope_pos95
-) {
+    model_summary,
+    observed_data,
+    group = "ccode",
+    filter_obs_to = "att_item == 'grhseff2'",
+    add_stars_on = slope_pos95,
+    apply_order = TRUE 
+  ){
 
-  # Defuse column passed to add_stars_on
   add_stars_on <- substitute(add_stars_on)
-  # Parse the filter_obs_to expression
-  obs_filter <- rlang::parse_expr(filter_obs_to)
+  group_sym <- rlang::sym(group)
 
   if (!is.null(filter_obs_to)) {
-    obs_data <- obs_data |>
+    obs_filter <- rlang::parse_expr(filter_obs_to)
+    observed_data <- observed_data |>
       filter(!!obs_filter)
   }
 
-  output <- obs_data |>
-    # Add posterior summary to observed data
-    full_join(
-      efx_data |>
-      mutate(cntry = ccode_to_cntry(eff_group)) |>
-      mutate(
-        # Create joining year and ndecade columns
-        year = 1993 + x * 10,
-        ndecade = x
-      ) |>
-      select(
-        -contains("eff_"), -x
-      ),
-      by = c(
-        "cntry", "year", "ndecade"
-      )
-    ) |>
-    # Add column with the median fitted trend for each country when it is 
-    # present in a survey wave
-    add_point_when_nonmissing(
-      observed_data = obs_data,
-      group_col = cntry
-    )
+  input <- model_summary |>
+    filter(eff_type == group) |> 
+    rename(!!group_sym := eff_group)
 
-  if (!is.null(add_stars_on)) {
-    # Paste asterisk to country names when their 95% credible interval is 
-    # above zero
-    output <- output |> 
-    mutate(
-      cntry = if_else(
-        {{ add_stars_on }}, paste0(cntry, "*"), cntry
-      )
-    )
+  if("ndecade" %in% names(input)){
+    input <- input  |> 
+      mutate(year = 1993 + ndecade * 10)
+  } else if ("year" %in% names(input)) {
+    input <- input |>
+      mutate(ndecade = (year - 1993) / 10)
+  } else {
+    stop("No variable called 'ndecade' or 'year' in model summary.")
   }
 
-    # Order country names by the size of their median slope
-    # It is important to do this after adding asterisks to country names
+  output <- suppressMessages(
+    input |> left_join(observed_data)
+  )
+
+  if (group == "ccode") {
     output <- output |>
-     mutate(
-      across(
-        cntry, ~factor(
-          .x, levels = unique(cntry[order(order)])
+      mutate(cntry = ccode_to_cntry(!!group_sym))
+  }
+
+  if (!is.null(add_stars_on)) {
+    if (group == "ccode") {
+      output <- output |> 
+        mutate(
+          cntry = if_else(
+            {{ add_stars_on }}, paste0(cntry, "*"), cntry
+          )
+        )
+    } else {
+      output <- output |> 
+        mutate(
+          !!group_sym := if_else(
+            {{ add_stars_on }}, paste0(!!group_sym, "*"), !!group_sym
+          )
+        )
+    }
+  }
+
+  if (apply_order) {
+    if (group == "ccode") {
+      output <- output |>
+       mutate(
+        across(
+          cntry, ~factor(
+            .x, levels = unique(cntry[order(order)])
+          )
         )
       )
-    )
+    } else {
+      output <- output |>
+       mutate(
+        across(
+          !!group_sym, ~factor(
+            .x, levels = unique(.x[order(order)])
+          )
+        )
+      )
+    }
+  }
+  
 
   return(output)
+  
 }
