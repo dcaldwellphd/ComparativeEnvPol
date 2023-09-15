@@ -36,8 +36,11 @@ summarise_trends <- function(
     control_var = NULL,
     control_val = NULL
 ) {
+
     # Create a vector of probabilities to extract from the posterior
     probs <- c(0.005, 0.025, 0.05, 0.5, 0.95, 0.975, 0.995)
+
+    x_sym <- rlang::sym(x)
 
     # If not controlling for changes in the distribution of attitudes
     if (is.null(control_var)) {
@@ -47,7 +50,7 @@ summarise_trends <- function(
             # random effects for each group
             tidybayes::spread_draws(
                 `(Intercept)`,
-                !!sym(x),
+                !!x_sym,
                 # Names of the columns containing parameter-value keys for 
                 # the random effects
                 b[term, group]
@@ -70,7 +73,7 @@ summarise_trends <- function(
             # and slope
             rename(
                 glbl_a = `(Intercept)`,
-                glbl_b = !!sym(x)
+                glbl_b = !!x_sym
                 ) |>
             # Create columns containing the sum of the global and random 
             # intercepts and slopes
@@ -129,7 +132,7 @@ summarise_trends <- function(
         posterior <- mod |>
             tidybayes::spread_draws(
                 `(Intercept)`,
-                !!sym(x),
+                !!x_sym,
                 # Column of draws for fixed effects of the control variable
                 !!sym(control_var),
                 b[term, group]
@@ -146,7 +149,7 @@ summarise_trends <- function(
             pivot_wider(names_from = term, values_from = b) |>
             rename(
                 glbl_a = `(Intercept)`,
-                glbl_b = !!sym(x),
+                glbl_b = !!x_sym,
                 # Renaming whatever control variable is supplied
                 contr_col = !!sym(control_var)
                 ) |>
@@ -269,7 +272,8 @@ summarise_trends <- function(
             cols = group,
             delim = ":",
             names = c("eff_type", "eff_group")
-        )
+        ) |> 
+        rename(!!x_sym := x)
 
     return(output)
 
