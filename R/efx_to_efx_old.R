@@ -47,13 +47,10 @@
 efx_to_efx <- function(
   baseline = mp_grhseff2_efx,
   baseline_obs = multiparty_pol,
-  filter_baseline_obs_to = NULL,
   baseline_label = "baseline",
   comparisons,
   comparison_obs = multiparty_pol,
-  filter_comparison_obs_to = NULL,
   comparison_labels = "comparison",
-  group = "ccode",
   add_stars_on = NULL
 ) {
   
@@ -62,31 +59,40 @@ efx_to_efx <- function(
     comparisons <- list(comparisons)
   }
 
-  group_sym <- rlang::sym(group)
+  # Defuse column passed to add_stars_on
   add_stars_on <- substitute(add_stars_on)
 
   output <- baseline |>
-    efx_to_obs(
+    # Filter to country effects
+    filter(eff_type == "ccode") |>
+    # Convert country codes to country names
+    mutate(cntry = ccode_to_cntry(eff_group)) |>
+    # Add column with the median fitted trend for each country when it is 
+    # present in a survey wave
+    add_point_when_nonmissing(
       observed_data = baseline_obs,
-      group = group,
-      filter_obs_to = filter_baseline_obs_to,
-      add_stars_on = NULL,
-      apply_order = FALSE
-    ) |> 
+      group = cntry,
+      time_counter = x
+    ) |>
     # Add column to distinguish baseline from comparison trends
-    mutate(pol_type = baseline_label) |> 
+    mutate(pol_type = baseline_label) |>
     # Join rows from the summary of comparison trends
     bind_rows(
       map2_df(comparisons, comparison_labels, ~.x |>
         # The plot is ordered by baseline slopes.
         # Remove the order column from comparison
         select(-order, -{{ add_stars_on }}) |>
-        efx_to_obs(
+        # Filter to country effects
+        filter(eff_type == "ccode") |>
+        # Create column of country names using country codes included in the 
+        # model
+        mutate(cntry = ccode_to_cntry(eff_group)) |>
+        # Add column with the median fitted trend for each country when it is 
+        # present in a survey wave
+        add_point_when_nonmissing(
           observed_data = comparison_obs,
-          group = group,
-          filter_obs_to = filter_comparison_obs_to,
-          add_stars_on = NULL,
-          apply_order = FALSE
+          group_col = cntry,
+          time_counter = x
         ) |>
         # Add column to distinguish comparison from baseline trends
         mutate(pol_type = .y)
@@ -94,49 +100,32 @@ efx_to_efx <- function(
     )
 
     if (!is.null(add_stars_on)) {
-      # Identify groups with positive slope in the baseline model
+      # Identify countries with positive slope in the baseline model
       pos_slope_cases <- baseline |>
-        filter(eff_type == group, {{ add_stars_on }}) |>
+        filter(eff_type == "ccode", {{ add_stars_on }}) |>
         pull(eff_group) |>
         unique()
-
-        if (group == "ccode") {
-          output <- output |>
-            mutate(
-              cntry = if_else(
-                ccode %in% pos_slope_cases, paste0(cntry, "*"), cntry
-              )
-            )
-        } else {
-          output <- output  |> 
-            mutate(
-              !!group_sym := if_else(
-                !!group_sym %in% pos_slope_cases, paste0(!!group_sym, "*"), !!group_sym
-              )
-            )
-        }
-      }
-      
-      if (group == "ccode") {
-        output <- output |>
-            mutate(
-             across(
-               cntry, ~factor(
-                 .x, levels = unique(cntry[order(order)])
-               )
+        
+      # Paste asterisk to country names when their 95% credible interval is 
+      # above zero
+      output <- output |>
+        mutate(
+          cntry = if_else(
+            eff_group %in% pos_slope_cases, paste0(cntry, "*"), cntry
             )
           )
-      } else {
-        output <- output |>
-            mutate(
-              across(
-                !!group_sym, ~factor(
-                  .x, levels = unique(.x[order(order)])
-                )
+    }
+
+    # Order country names by the size of their median slope in the climate 
+    # partisan polarization model
+    output <- output |> 
+      mutate(
+        across(
+          cntry, ~factor(
+            .x, levels = unique(cntry[order(order)])
             )
           )
-      }
+        ) |>
+      arrange(order)
 
-    return(output)
-
-  }
+}

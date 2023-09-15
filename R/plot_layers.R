@@ -12,10 +12,9 @@
 #' credible interval of the median regression line for each group.
 #' @param ci_lower Name of the variable containing the lower bound of the 
 #' credible interval of the median regression line for each group.
+#' @param use_linerange Logical. Do you want to draw vertical lines along the
+#' credible interval at each point on the x-axis?
 #' @param hline A value along which to draw a horizontal line on the y-axis.
-#' @param missingness_var A variable containing median values along the 
-#' regression line for each group, for when you want to make the line and 
-#' credible interval less promiment outside the range of available data.
 #'
 #' @export
 #'
@@ -28,15 +27,14 @@ plot_layers <- function(
   line = NULL,
   ci_upper = NULL,
   ci_lower = NULL,
-  hline = NULL,
-  missingness_var = NULL
+  use_linerange = FALSE,
+  hline = NULL
 ) {
 
   points_quo <- enquo(points)
   line_quo <- enquo(line)
   ci_upper_quo <- enquo(ci_upper)
   ci_lower_quo <- enquo(ci_lower)
-  missingness_var_quo <- enquo(missingness_var)
 
   # Draws points for each group
   if(!quo_is_null(points_quo)) {
